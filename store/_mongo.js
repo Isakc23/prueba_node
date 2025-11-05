@@ -32,6 +32,15 @@ const connect = async () => {
     };
 };
 
+const disconnect = async () => {
+    if (cachedClient) {
+        await cachedClient.close();
+        cachedClient = undefined;
+    }
+};
+
+
 module.exports = {
-    connect
+    connect,
+    disconnect
 };

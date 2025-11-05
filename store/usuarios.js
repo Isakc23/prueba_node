@@ -104,6 +104,7 @@ const getById = async (id) => {
         return cached;
     }
 
+const db = await mysqlManager.connect();
 try {
         const [rows] = await db.query('SELECT id, username, email, created_at FROM usuarios WHERE id = ?', [id]);
         if (!rows.length) {

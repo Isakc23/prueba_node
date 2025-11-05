@@ -8,7 +8,7 @@ const connect = () => {
         password: process.env.MYSQL_PASS,
         database: process.env.MYSQL_DATABASE
     });
-}
+};
 
 
 module.exports = {
