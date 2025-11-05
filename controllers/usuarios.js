@@ -1,25 +1,33 @@
-const Usuario = require('../models/usuario');
 const usuariosStore = require('../store/usuarios');
 
-const usuarios = [
-    new Usuario(1, 'erik'),
-    new Usuario(2, 'frida'),
-    new Usuario(3, 'david')
-];
-
-const getAll = async (_req,res) => {
-    const users = await usuariosStore.getAll();
-    res.json(users);
+const getAll = async (_req, res) => {
+    try {
+        const users = await usuariosStore.getAll();
+        res.json(users);
+    } catch (error) {
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({ message: 'Error al obtener los usuarios' });
+    }
 };
 
-const getById = (req,res) => {
-    const id = req.params.id;
-    const user = usuarios.find(u => u.id == id);
-    if (!user) {
-        res.status(404).json({status:404});
+const getById = async (req, res) => {
+    const id = Number(req.params.id);
+    if (Number.isNaN(id)) {
+        res.status(400).json({ message: 'Identificador inválido' });
         return;
     }
-    res.json(user);
+
+    try {
+        const user = await usuariosStore.getById(id);
+        if (!user) {
+            res.status(404).json({ status: 404, message: 'Usuario no encontrado' });
+            return;
+        }
+        res.json(user);
+    } catch (error) {
+        console.error(`Error al obtener usuario ${id}:`, error);
+        res.status(500).json({ message: 'Error al obtener el usuario' });
+    }
 };
 
 module.exports = {
